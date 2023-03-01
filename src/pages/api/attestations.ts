@@ -67,7 +67,7 @@ export default async function handler(
         votes[projectName].votes.push(voteCount);
         votes[projectName].score = Math.pow(
           votes[projectName].votes.reduce(
-            (a, b) => Math.sqrt(a) + Math.sqrt(b),
+            (a, b) => a + Math.sqrt(b),
             0,
           ),
           2,
