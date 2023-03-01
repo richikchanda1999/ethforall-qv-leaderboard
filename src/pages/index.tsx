@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flex, Text, Image, Input } from "@chakra-ui/react";
+import { Flex, Text, Image, Input, CircularProgress } from "@chakra-ui/react";
 import { AttestationData, AttestationResponse, ProjectData } from "src/types";
 import PROJECTS from "src/constants/PROJECTS";
 
@@ -10,21 +10,27 @@ export default function Home() {
     const attestationData = await fetch("/api/attestations");
     if (attestationData.status === 200) {
       const json: AttestationResponse = await attestationData.json();
-      const votes: Project[] = [];
-      for (const slug in json) {
-        const project = PROJECTS[slug];
-        votes.push({ slug, ...project, ...json[slug] });
+      if (json.value) {
+        const votes: Project[] = [];
+        for (const slug in PROJECTS) {
+          votes.push({ slug, ...PROJECTS[slug], ...json.value[slug] });
+        }
+        setProjects(votes.sort((a, b) => b.score - a.score));
       }
-      setProjects(votes.sort((a, b) => b.score - a.score));
     }
+    setIsLoading(false)
   };
 
-  useEffect(() => {
-    decode();
-  }, []);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [searchText, setSearchText] = useState<string>("");
+
+  useEffect(() => {
+    if (isLoading) return
+    setIsLoading(true)
+    decode();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Flex direction={"column"} align="center" p={6} h="100vh" gap={4}>
@@ -34,13 +40,17 @@ export default function Home() {
         justify="center"
         gap={4}
       >
-        <Text fontSize={{base: "2rem", sm: '3rem', lg: "4rem"}} textAlign='center'>Quadratic Voting</Text>
-        <Text fontSize={{base: "2rem", sm: '3rem', lg: "4rem"}} textAlign='center'>Leaderboard</Text>
+        <Text fontSize={{ base: "2rem", sm: '3rem', lg: "4rem" }} textAlign='center'>Quadratic Voting</Text>
+        <Text fontSize={{ base: "2rem", sm: '3rem', lg: "4rem" }} textAlign='center'>Leaderboard</Text>
       </Flex>
 
       <Input value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='Search for projects by name' p={2} />
 
-      <Flex direction="column" overflowY={"scroll"} w='100%'>
+      {
+        isLoading && <CircularProgress isIndeterminate />
+      }
+
+      {!isLoading && <Flex direction="column" overflowY={"scroll"} w='100%'>
         {projects.filter(p => searchText === '' || p.name.toLowerCase().includes(searchText.toLowerCase())).map((project, index) => {
           return (
             <Flex
@@ -90,8 +100,8 @@ export default function Home() {
                   >
                     <Text fontSize="18px">{project.name}</Text>
                     <Text color="gray">
-                      {project.attestations.length} attestation
-                      {project.attestations.length > 0 ? "s" : ""}
+                      {project.attestations?.length || 0} attestation
+                      {(project.attestations?.length || 0) > 0 ? "s" : ""}
                     </Text>
                   </Flex>
                   <Text color="gray.500" textAlign={"justify"}>
@@ -107,16 +117,16 @@ export default function Home() {
                   ml={{ base: 0, md: 4 }}
                   mt={{ base: 4, md: 0 }}
                 >
-                  <Text fontSize="18px">Score: {project.score.toFixed(2)}</Text>
+                  <Text fontSize="18px">Score: {project.score ? project.score.toFixed(2) : 0}</Text>
                   <Text fontSize="18px">
-                    Total votes: {project.votes.reduce((a, b) => a + b, 0)}
+                    Total votes: {project.votes?.reduce((a, b) => a + b, 0)}
                   </Text>
                 </Flex>
               </Flex>
             </Flex>
           );
         })}
-      </Flex>
+      </Flex>}
     </Flex>
   );
 }
