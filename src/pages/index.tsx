@@ -100,8 +100,8 @@ export default function Home() {
                   >
                     <Text fontSize="18px">{project.name}</Text>
                     <Text color="gray">
-                      {project.attestations?.length || 0} attestation
-                      {(project.attestations?.length || 0) > 0 ? "s" : ""}
+                      {project.votes?.length || 0} attestation
+                      {(project.votes?.length || 0) > 0 ? "s" : ""}
                     </Text>
                   </Flex>
                   <Text color="gray.500" textAlign={"justify"}>

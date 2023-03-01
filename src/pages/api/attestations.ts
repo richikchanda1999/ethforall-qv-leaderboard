@@ -27,7 +27,7 @@ export default async function handler(
       if (response.status === 200) {
         const data = await response.json();
         if (data.attestations.length === 0) break;
-        attestations.push(...data['attestations']);
+        attestations.push(...data["attestations"]);
       }
     }
 
@@ -43,7 +43,7 @@ export default async function handler(
 
     const schemaEncoder = new SchemaEncoder(schema.schema);
 
-    const votes: AttestationResponse['value'] = {};
+    const votes: AttestationResponse["value"] = {};
 
     for (const attestation of attestations) {
       const decodedData = schemaEncoder.decodeData(attestation.data);
@@ -51,34 +51,31 @@ export default async function handler(
       if (!Array.isArray(values.value)) continue;
 
       for (const value of values.value) {
-        const projectName = value[0]["value"];
+        const slug = value[0]["value"];
         const voteCount = value[1]["value"];
-        if (typeof projectName !== "string" || typeof voteCount !== "number")
-          continue;
+        if (typeof slug !== "string" || typeof voteCount !== "number") continue;
 
-        if (!(projectName in votes)) {
-          votes[projectName] = {
+        if (!(slug in votes)) {
+          votes[slug] = {
             votes: [],
             score: 0,
-            attestations: [],
           };
         }
 
-        votes[projectName].votes.push(voteCount);
-        votes[projectName].score = Math.pow(
-          votes[projectName].votes.reduce(
-            (a, b) => a + Math.sqrt(b),
-            0,
-          ),
-          2,
-        );
-        votes[projectName].attestations?.push(attestation);
+        votes[slug].votes.push(voteCount);
       }
     }
 
-    res.status(200).json({value: votes});
+    for (const slug in votes) {
+      votes[slug].score = Math.pow(
+        votes[slug].votes.reduce((a, b) => a + Math.sqrt(b), 0),
+        2,
+      );
+    }
+
+    res.status(200).json({ value: votes });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: JSON.stringify(e) });
   }
 }
