@@ -155,13 +155,12 @@ export default function Home() {
                         >
                           {project.name}
                         </Text>
-                        <Text color="gray">
+                        <Popover trigger="hover" isLazy>
+                          <PopoverTrigger>
+                          <Text color="gray">
                           {project.votes?.length || 0} attestation
                           {(project.votes?.length || 0) > 0 ? "s" : ""}
                         </Text>
-                        {/* <Popover trigger="hover" isLazy>
-                          <PopoverTrigger>
-                            
                           </PopoverTrigger>
                           <PopoverContent h={"40vh"}>
                             <PopoverArrow />
@@ -183,24 +182,24 @@ export default function Home() {
                                     <Flex
                                       key={index}
                                       direction="column"
-                                      m={4}
                                       p={4}
+                                      mx={2}
                                       gap={1}
                                       borderBottom={
                                         index !==
                                         project?.attestations.length - 1
-                                          ? "1px solid #E4E4E4"
+                                          ? "1px solid #767471"
                                           : "none"
                                       }
                                     >
                                       <Link
-                                        href={`https://arbitrum.easscan.org/attestation/view/${attestation.id}`}
+                                        href={`https://arbitrum.easscan.org/attestation/view/${attestation.uid}`}
                                         isExternal
                                       >
-                                        {formatUID(attestation.id)}
+                                        {formatUID(attestation.uid)}
                                       </Link>
                                       <Text color="gray.500">
-                                        Attested at{" "}
+                                        Attested on{" "}
                                         {moment
                                           .unix(parseInt(attestation.time))
                                           .format("DD MMM")}
@@ -211,7 +210,7 @@ export default function Home() {
                               )}
                             </Flex>
                           </PopoverContent>
-                        </Popover> */}
+                        </Popover>
                       </Flex>
                       <Text color="gray.500" textAlign={"justify"}>
                         {project.tagline}

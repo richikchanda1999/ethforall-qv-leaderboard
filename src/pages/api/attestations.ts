@@ -59,12 +59,12 @@ export default async function handler(
           votes[slug] = {
             votes: [],
             score: 0,
-            // attestations: []
+            attestations: []
           };
         }
 
         votes[slug].votes.push(voteCount);
-        // votes[slug].attestations.push(attestation);
+        votes[slug].attestations.push({uid: attestation.id, time: attestation.time});
       }
     }
 
@@ -74,9 +74,9 @@ export default async function handler(
         2,
       );
 
-      // votes[slug].attestations.sort((a, b) => {
-      //   return parseInt(b.time) - parseInt(a.time)
-      // })
+      votes[slug].attestations.sort((a, b) => {
+        return parseInt(b.time) - parseInt(a.time)
+      })
     }
 
     res.status(200).json({ value: votes });
