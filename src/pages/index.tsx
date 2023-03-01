@@ -74,7 +74,13 @@ export default function Home() {
 
       <Flex>
         <Text fontSize={{ base: "1rem", sm: "2rem", lg: "3rem" }}>For</Text>
-        <Link ml={2} fontSize={{ base: "1rem", sm: "2rem", lg: "3rem" }} href="https://ethforall.devfolio.co/" isExternal color='#0A84FF'>
+        <Link
+          ml={2}
+          fontSize={{ base: "1rem", sm: "2rem", lg: "3rem" }}
+          href="https://ethforall.devfolio.co/"
+          isExternal
+          color="#0A84FF"
+        >
           Eth For All
         </Link>
       </Flex>
@@ -149,14 +155,13 @@ export default function Home() {
                         >
                           {project.name}
                         </Text>
-                        <Popover trigger="hover" isLazy>
+                        <Text color="gray">
+                          {project.votes?.length || 0} attestation
+                          {(project.votes?.length || 0) > 0 ? "s" : ""}
+                        </Text>
+                        {/* <Popover trigger="hover" isLazy>
                           <PopoverTrigger>
-                            <Button variant={"unstyled"} color="gray">
-                              {project.attestations?.length || 0} attestation
-                              {(project.attestations?.length || 0) > 0
-                                ? "s"
-                                : ""}
-                            </Button>
+                            
                           </PopoverTrigger>
                           <PopoverContent h={"40vh"}>
                             <PopoverArrow />
@@ -206,7 +211,7 @@ export default function Home() {
                               )}
                             </Flex>
                           </PopoverContent>
-                        </Popover>
+                        </Popover> */}
                       </Flex>
                       <Text color="gray.500" textAlign={"justify"}>
                         {project.tagline}

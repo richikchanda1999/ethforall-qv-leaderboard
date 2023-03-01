@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import {
-  Attestation,
   SchemaEncoder,
   SchemaRegistry,
 } from "@ethereum-attestation-service/eas-sdk";
@@ -8,7 +7,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
 import { AttestationResponse } from "src/types";
 import ATTESTATION from "src/constants/ATTESTATION";
-import moment from "moment";
 
 export default async function handler(
   req: NextApiRequest,
@@ -61,12 +59,12 @@ export default async function handler(
           votes[slug] = {
             votes: [],
             score: 0,
-            attestations: []
+            // attestations: []
           };
         }
 
         votes[slug].votes.push(voteCount);
-        votes[slug].attestations.push(attestation);
+        // votes[slug].attestations.push(attestation);
       }
     }
 
@@ -76,9 +74,9 @@ export default async function handler(
         2,
       );
 
-      votes[slug].attestations.sort((a, b) => {
-        return parseInt(b.time) - parseInt(a.time)
-      })
+      // votes[slug].attestations.sort((a, b) => {
+      //   return parseInt(b.time) - parseInt(a.time)
+      // })
     }
 
     res.status(200).json({ value: votes });
