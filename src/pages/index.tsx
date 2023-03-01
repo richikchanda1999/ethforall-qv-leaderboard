@@ -27,7 +27,16 @@ export default function Home() {
 
   return (
     <Flex direction={"column"} align="center" p={6} h="100vh">
-      <Text fontSize="4rem">Leaderboard</Text>
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        align="center"
+        justify="center"
+        gap={4}
+      >
+        <Text fontSize={{base: "2rem", sm: '3rem', lg: "4rem"}} textAlign='center'>Quadratic Voting</Text>
+        <Text fontSize={{base: "2rem", sm: '3rem', lg: "4rem"}} textAlign='center'>Leaderboard</Text>
+      </Flex>
+
       <Flex direction="column" overflowY={"scroll"} mt={4}>
         {projects.map((project, index) => {
           return (
@@ -38,35 +47,65 @@ export default function Home() {
               boxShadow="0 1px 25px rgba(0,0,0,0.2)"
               borderRadius={"1rem"}
               align="center"
-              direction={["column", "row"]}
-              cursor='pointer'
-              onClick={() => window.open(`https://devfolio.co/projects/${project.slug}`, '_blank')}
+              direction={{ base: "column", md: "row" }}
+              cursor="pointer"
+              onClick={() =>
+                window.open(
+                  `https://devfolio.co/projects/${project.slug}`,
+                  "_blank",
+                )
+              }
             >
-             
-                <Image
-                  src={project.image === null ? `https://avatars.dicebear.com/api/initials/${project.name}.svg?fontSize=32` : project.image}
-                  borderRadius="0.5rem"
-                  boxSize={["5rem", "4rem"]}
-                  alt={project.slug}
-                />
-              
-              <Flex w='100%' justify='space-between' align='center' direction={['column', 'row']} mt={[4, 0]} ml={[0, 4]}>
-                <Flex direction="column" gap={1} >
+              <Image
+                src={
+                  project.image === null
+                    ? `https://avatars.dicebear.com/api/initials/${project.name}.svg?fontSize=32`
+                    : project.image
+                }
+                borderRadius="0.5rem"
+                boxSize={{ base: "5rem", md: "4rem" }}
+                alt={project.slug}
+              />
+
+              <Flex
+                w="100%"
+                justify="space-between"
+                align="center"
+                direction={{ base: "column", md: "row" }}
+                mt={{ base: 4, md: 0 }}
+                ml={{ base: 0, md: 4 }}
+              >
+                <Flex
+                  w={{ base: "100%", md: "auto" }}
+                  direction="column"
+                  gap={1}
+                >
                   <Flex
                     gap={4}
-                    justify={["space-between", "start"]}
-                    align='baseline'
+                    justify={{ base: "space-between", md: "start" }}
+                    align="baseline"
                   >
-                    <Text fontSize='18px'>{project.name}</Text>
+                    <Text fontSize="18px">{project.name}</Text>
                     <Text color="gray">
-                      {project.attestations.length} attestations
+                      {project.attestations.length} attestation{" "}
+                      {project.attestations.length > 0 ? "s" : ""}
                     </Text>
                   </Flex>
-                  <Text color="gray.500" textAlign={'justify'}>{project.tagline}</Text>
+                  <Text color="gray.500" textAlign={"justify"}>
+                    {project.tagline}
+                  </Text>
                 </Flex>
-                <Flex direction='column' align='end' ml={"auto"} gap={1}>
-                  <Text fontSize='18px'>Score: {project.score.toFixed(2)}</Text>
-                  <Text fontSize='18px'>
+                <Flex
+                  w={{ base: "100%", md: "auto" }}
+                  direction={{ base: "row", lg: "column" }}
+                  align="end"
+                  justify={{ base: "space-between", lg: "center" }}
+                  gap={1}
+                  ml={{ base: 0, md: 4 }}
+                  mt={{ base: 4, md: 0 }}
+                >
+                  <Text fontSize="18px">Score: {project.score.toFixed(2)}</Text>
+                  <Text fontSize="18px">
                     Total votes: {project.votes.reduce((a, b) => a + b, 0)}
                   </Text>
                 </Flex>
