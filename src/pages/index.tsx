@@ -87,7 +87,7 @@ export default function Home() {
                   >
                     <Text fontSize="18px">{project.name}</Text>
                     <Text color="gray">
-                      {project.attestations.length} attestation{" "}
+                      {project.attestations.length} attestation
                       {project.attestations.length > 0 ? "s" : ""}
                     </Text>
                   </Flex>
