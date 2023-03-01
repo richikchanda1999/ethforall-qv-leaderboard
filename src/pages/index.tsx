@@ -136,6 +136,7 @@ export default function Home() {
                       w={{ base: "100%", md: "auto" }}
                       direction="column"
                       gap={1}
+                      maxW={{base: 'auto', md: '60%'}}
                     >
                       <Flex
                         gap={4}
@@ -218,9 +219,9 @@ export default function Home() {
                     </Flex>
                     <Flex
                       w={{ base: "100%", md: "auto" }}
-                      direction={{ base: "row", lg: "column" }}
+                      direction={{ base: "row", md: "column" }}
                       align="end"
-                      justify={{ base: "space-between", lg: "center" }}
+                      justify={{ base: "space-between", md: "center" }}
                       gap={1}
                       ml={{ base: 0, md: 4 }}
                       mt={{ base: 4, md: 0 }}
