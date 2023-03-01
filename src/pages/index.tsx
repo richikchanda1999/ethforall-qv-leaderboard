@@ -47,8 +47,8 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const formatUID = (uid: string) => uid ?
-    `${uid.substring(0, 4)}....${uid.substring(uid.length - 4)}` : '';
+  const formatUID = (uid: string) =>
+    uid ? `${uid.substring(0, 4)}....${uid.substring(uid.length - 4)}` : "";
 
   return (
     <Flex direction={"column"} align="center" p={6} h="100vh" gap={4}>
@@ -56,7 +56,7 @@ export default function Home() {
         direction={{ base: "column", md: "row" }}
         align="center"
         justify="center"
-        gap={4}
+        gap={2}
       >
         <Text
           fontSize={{ base: "2rem", sm: "3rem", lg: "4rem" }}
@@ -70,6 +70,13 @@ export default function Home() {
         >
           Leaderboard
         </Text>
+      </Flex>
+
+      <Flex>
+        <Text fontSize={{ base: "1rem", sm: "2rem", lg: "3rem" }}>For</Text>
+        <Link ml={2} fontSize={{ base: "1rem", sm: "2rem", lg: "3rem" }} href="https://ethforall.devfolio.co/" isExternal color='#0A84FF'>
+          Eth For All
+        </Link>
       </Flex>
 
       <Input
@@ -168,15 +175,30 @@ export default function Home() {
                               {project.attestations?.map(
                                 (attestation, index) => {
                                   return (
-                                    <Flex key={index} direction="column" m={4} p={4} gap={1} borderBottom={index !== project?.attestations.length - 1 ? '1px solid #E4E4E4' : 'none'}>
+                                    <Flex
+                                      key={index}
+                                      direction="column"
+                                      m={4}
+                                      p={4}
+                                      gap={1}
+                                      borderBottom={
+                                        index !==
+                                        project?.attestations.length - 1
+                                          ? "1px solid #E4E4E4"
+                                          : "none"
+                                      }
+                                    >
                                       <Link
                                         href={`https://arbitrum.easscan.org/attestation/view/${attestation.id}`}
                                         isExternal
                                       >
                                         {formatUID(attestation.id)}
                                       </Link>
-                                      <Text color='gray.500'>
-                                        Attested at {moment.unix(parseInt(attestation.time)).format('DD MMM')}
+                                      <Text color="gray.500">
+                                        Attested at{" "}
+                                        {moment
+                                          .unix(parseInt(attestation.time))
+                                          .format("DD MMM")}
                                       </Text>
                                     </Flex>
                                   );
