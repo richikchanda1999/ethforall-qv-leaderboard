@@ -7,13 +7,15 @@ import {
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
 import { AttestationResponse } from "src/types";
+import ATTESTATION from "src/constants/ATTESTATION";
+import moment from "moment";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<AttestationResponse>,
 ) {
   try {
-    const attestations: Attestation[] = [];
+    const attestations: (typeof ATTESTATION)[] = [];
     for (let i = 1; ; ++i) {
       const endpoint = `${process.env.EAS_ENDPOINT}?page=${i}`;
       const response = await fetch(endpoint, {
@@ -59,10 +61,12 @@ export default async function handler(
           votes[slug] = {
             votes: [],
             score: 0,
+            attestations: []
           };
         }
 
         votes[slug].votes.push(voteCount);
+        votes[slug].attestations.push(attestation);
       }
     }
 
@@ -71,6 +75,10 @@ export default async function handler(
         votes[slug].votes.reduce((a, b) => a + Math.sqrt(b), 0),
         2,
       );
+
+      votes[slug].attestations.sort((a, b) => {
+        return parseInt(b.time) - parseInt(a.time)
+      })
     }
 
     res.status(200).json({ value: votes });
