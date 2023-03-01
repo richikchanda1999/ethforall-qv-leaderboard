@@ -202,7 +202,7 @@ export default function Home() {
                                         Attested on{" "}
                                         {moment
                                           .unix(parseInt(attestation.time))
-                                          .format("DD MMM")}
+                                          .format("DD MMM, HH:mm")}
                                       </Text>
                                     </Flex>
                                   );
