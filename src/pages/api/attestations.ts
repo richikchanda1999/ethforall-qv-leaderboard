@@ -1,14 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { SchemaEncoder, SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { SAMPLE } from "src/constants";
+import { SAMPLE } from "src/constants/SAMPLE";
 import { ethers } from "ethers";
-
-type Data =  {[key: string]: number}
+import { AttestationResponse, AttestationData } from "src/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>,
+  res: NextApiResponse<AttestationResponse>,
 ) {
   // const endpoint =
   //  `${process.env.ENDPOINT}`?page=1";
@@ -30,8 +29,7 @@ export default async function handler(
 
   const schemaEncoder = new SchemaEncoder(schema.schema);
 
-  const votes: Data = {}
-
+  const votes: AttestationResponse = {}
 
   for(const attestation of SAMPLE.attestations) {
     const decodedData = schemaEncoder.decodeData(attestation.data);
@@ -43,7 +41,17 @@ export default async function handler(
       const voteCount = value[1]['value']
       if (typeof projectName !== 'string' || typeof voteCount !== 'number') continue
 
-      votes[projectName] = (votes[projectName] || 0) + voteCount
+      if (!(projectName in votes)) {
+        votes[projectName] = {
+          votes: [],
+          score: 0,
+          attestations: []
+        }
+      }
+
+      votes[projectName].votes.push(voteCount)
+      votes[projectName].score = Math.pow(votes[projectName].votes.reduce((a, b) => Math.sqrt(a) + Math.sqrt(b), 0), 2)
+      votes[projectName].attestations.push(attestation)
     }
   }
   

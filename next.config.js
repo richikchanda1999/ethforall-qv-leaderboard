@@ -2,7 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    ENDPOINT: process.env.ENDPOINT,
+    EAS_ENDPOINT: process.env.EAS_ENDPOINT,
+    DEVFOLIO_ENDPOINT: process.env.DEVFOLIO_ENDPOINT,
   }
 }
 
