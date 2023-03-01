@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flex, Text, Image } from "@chakra-ui/react";
+import { Flex, Text, Image, Input } from "@chakra-ui/react";
 import { AttestationData, AttestationResponse, ProjectData } from "src/types";
 import PROJECTS from "src/constants/PROJECTS";
 
@@ -24,9 +24,10 @@ export default function Home() {
   }, []);
 
   const [projects, setProjects] = useState<Project[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
 
   return (
-    <Flex direction={"column"} align="center" p={6} h="100vh">
+    <Flex direction={"column"} align="center" p={6} h="100vh" gap={4}>
       <Flex
         direction={{ base: "column", md: "row" }}
         align="center"
@@ -37,8 +38,10 @@ export default function Home() {
         <Text fontSize={{base: "2rem", sm: '3rem', lg: "4rem"}} textAlign='center'>Leaderboard</Text>
       </Flex>
 
-      <Flex direction="column" overflowY={"scroll"} mt={4}>
-        {projects.map((project, index) => {
+      <Input value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='Search for projects by name' p={2} />
+
+      <Flex direction="column" overflowY={"scroll"} w='100%'>
+        {projects.filter(p => searchText === '' || p.name.toLowerCase().includes(searchText.toLowerCase())).map((project, index) => {
           return (
             <Flex
               m={4}
